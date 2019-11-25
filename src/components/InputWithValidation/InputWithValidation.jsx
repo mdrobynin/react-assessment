@@ -6,7 +6,8 @@ export function InputWithValidation({
         type = 'text',
         value = '',
         onError = () => {},
-        onChange = () => {}
+        onChange = () => {},
+        ...rest
     }) {
     let [ inputValue, setInputValue ] = useState(value);
 
@@ -24,11 +25,12 @@ export function InputWithValidation({
 
     const handleChange = (event) => {
         setInputValue(event.target.value);
-        onChange(event.target.value);
+        onChange(event);
     }
 
     return (
         <input className="input-with-validation"
+            {...rest}
             type={type}
             value={inputValue}
             onChange={handleChange}

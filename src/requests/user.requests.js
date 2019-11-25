@@ -20,7 +20,12 @@ export function performLogin(login, password) {
 }
 
 export function performLogout() {
-    return post(paths.LOGOUT).then(removeSessionToken);
+    return post(paths.LOGOUT)
+        .then(result => {
+            removeSessionToken();
+
+            return result.status === 200;
+        });
 }
 
 export function fetchUserData() {
