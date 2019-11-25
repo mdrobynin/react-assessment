@@ -2,9 +2,10 @@
     height: 30px;
     min-width: 200px;
     outline: none;
-    border: 1px solid #AAA;
+    border: none;
     border-radius: 3px;
     padding: 5px 10px;
     font-size: 16px;
     margin: 5px;
+    box-shadow: 0 0 5px 0 #AAA;
 }

@@ -1,31 +1,38 @@
 import {
     performLogin,
     fetchUserData,
-    performLogout
+    performLogout,
+    checkAuthStatus
 } from '../requests';
 
 export const USER_ACTIONS = {
     LOGIN_LOGOUT_PROCESS: '@@USER_ACTIONS/LOGIN_LOGOUT_PROCESS',
+    AUTH_STATE_CHECK: '@@USER_ACTIONS/AUTH_STATE_CHECK',
     LOGIN_ERROR: '@@USER_ACTIONS/LOGIN_ERROR',
     LOGIN_SUCCESS: '@@USER_ACTIONS/LOGIN_SUCCESS',
     LOGOUT_ERROR: '@@USER_ACTIONS/LOGOUT_ERROR',
     LOGOUT_SUCCESS: '@@USER_ACTIONS/LOGOUT_SUCCESS',
 }
 
+function fetchUser(dispatch) {
+    fetchUserData().then(userData => {
+        dispatch({
+            type: USER_ACTIONS.LOGIN_SUCCESS,
+            payload: userData
+        });
+        dispatch({ type: USER_ACTIONS.LOGIN_LOGOUT_PROCESS, payload: false });
+        dispatch({ type: USER_ACTIONS.AUTH_STATE_CHECK });
+    });
+}
+
 export function login(login, password) {
-    return (dispatch) => {
+    return dispatch => {
         dispatch({ type: USER_ACTIONS.LOGIN_LOGOUT_PROCESS, payload: true });
 
-        performLogin(login, password)
+        return performLogin(login, password)
             .then(result => {
                 if (result) {
-                    fetchUserData().then(userData => {
-                        dispatch({
-                            type: USER_ACTIONS.LOGIN_SUCCESS,
-                            payload: userData
-                        });
-                        dispatch({ type: USER_ACTIONS.LOGIN_LOGOUT_PROCESS, payload: false });
-                    });
+                    fetchUser(dispatch);
                 } else {
                     dispatch({ type: USER_ACTIONS.LOGIN_ERROR });
                     dispatch({ type: USER_ACTIONS.LOGIN_LOGOUT_PROCESS, payload: false });
@@ -35,13 +42,26 @@ export function login(login, password) {
 }
 
 export function logout() {
-    return (dispatch) => {
+    return dispatch => {
         dispatch({ type: USER_ACTIONS.LOGIN_LOGOUT_PROCESS, payload: true });
 
-        performLogout()
+        return performLogout()
             .then(result => {
                 dispatch({ type: result ? USER_ACTIONS.LOGOUT_SUCCESS : USER_ACTIONS.LOGOUT_ERROR });
                 dispatch({ type: USER_ACTIONS.LOGIN_LOGOUT_PROCESS, payload: false });
             });
     };
+}
+
+export function checkLogin() {
+    return dispatch => {
+        return checkAuthStatus().then(result => {
+            if (result) {
+                fetchUser(dispatch);
+            } else {
+                dispatch({ type: USER_ACTIONS.LOGOUT_SUCCESS });
+                dispatch({ type: USER_ACTIONS.AUTH_STATE_CHECK });
+            }
+        });
+    }
 }

@@ -1,0 +1,62 @@
+.login-page {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &__content {
+    }
+
+    &__header {
+        display: flex;
+        align-items: center;
+        padding: 20px;
+        
+        &-logo {
+            max-width: 80px;
+            animation: rotateInfinite 10s linear infinite;
+        }
+
+        &-title {
+            margin-left: 20px;
+            font-size: 30px;
+            font-weight: 600;
+            color: #777;
+        }
+    }
+
+    &__form {
+        box-shadow: 1px 1px 10px 0 #AAA, 2px 2px 20px 0 #EEE;
+        border-radius: 5px;
+        padding: 20px;
+        background: #EEE;
+
+        &-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #777;
+            margin: 10px 5px;
+
+        }
+
+        &-error {
+            color: #FF5555;
+        }
+        &-field {
+
+        }
+    }
+    
+    &__actions {
+        margin: 10px 5px;
+        display: flex;
+        justify-content: center;
+    }
+}
+
+@keyframes rotateInfinite {
+    100% {
+        transform: rotate(360deg);
+    }
+}

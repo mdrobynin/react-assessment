@@ -5,7 +5,8 @@ const initialState = {
     loginError: null,
     logoutError: null,
     authenticated: false,
-    userData: null
+    userData: null,
+    authStateChecked: false
 };
 
 export default function(state = initialState, action) {
@@ -19,16 +20,19 @@ export default function(state = initialState, action) {
             };
         }
         case USER_ACTIONS.LOGIN_SUCCESS: {
-            return {...state, userData: action.payload };
+            return {...state, userData: action.payload, authenticated: true };
         }
         case USER_ACTIONS.LOGIN_ERROR: {
             return {...state, loginError: action.payload };
         }
         case USER_ACTIONS.LOGOUT_SUCCESS: {
-            return {...state, userData: null }; 
+            return {...state, userData: null, authenticated: false }; 
         }
         case USER_ACTIONS.LOGOUT_ERROR: {
             return {...state, logoutError: action.payload };
+        }
+        case USER_ACTIONS.AUTH_STATE_CHECK: {
+            return {...state, authStateChecked: true };
         }
         default:
             return state;
