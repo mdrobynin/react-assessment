@@ -3,8 +3,6 @@ import { ProductCard } from 'components';
 import './ProductsContainer.scss';
 
 export function ProductsContainer({ products }) {
-    console.log(products);
-
     return (
         <div className="products-container">
             {

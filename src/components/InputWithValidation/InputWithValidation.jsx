@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './InputWithValidation.scss';
 
 export function InputWithValidation({
@@ -9,7 +9,11 @@ export function InputWithValidation({
         onChange = () => {},
         ...rest
     }) {
-    let [ inputValue, setInputValue ] = useState(value);
+    let [ inputValue, setInputValue ] = useState('');
+
+    useEffect(() => {
+        setInputValue(value);
+    }, [ value, setInputValue ]);
 
     const validate = () => {
         if (!rules || rules.length === 0) return;

@@ -1,20 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CustomButton, InputWithValidation } from 'components';
 import './ProductsFilter.scss';
 
-export function ProductsFilter({products}) {
-    const categories = [
-        'None',
-        'Category',
-        'Sample',
-        'Another'
-    ];
-
+export function ProductsFilter({
+    products,
+    onApplyFilter = () => {},
+    onClearFilter = () => {}
+}) {
+    const genders = [ 'Any', 'Man', 'Woman', 'Unisex' ];
+    let [ categories, setCategories ] = useState(['None']);
+    let [ category, setCategory ] = useState('None');
     let [ availableOnly, setAvailableOnly ] = useState(false);
-    let [ gender, setGender ] = useState('unisex');
+    let [ gender, setGender ] = useState('Any');
     let [ rating, setRating ] = useState('');
     let [ priceFrom, setPriceFrom ] = useState('');
     let [ priceTo, setPriceTo ] = useState('');
+
+    useEffect(() => {
+        setCategories(['None', ...Array.from(new Set(products.map(p => p.category)))]);
+    }, [ products, setCategories ]);
 
     const handleRatingChange = (event) => {
         setRating(event.target.value);
@@ -28,12 +32,30 @@ export function ProductsFilter({products}) {
         setPriceTo(event.target.value);
     };
 
-    const applyFilters = () => {
+    const handleCategoryChange = (event) => {
+        setCategory(event.target.value);
+    };
 
+    const applyFilters = () => {
+        onApplyFilter({
+            category,
+            availableOnly,
+            gender,
+            rating,
+            priceFrom,
+            priceTo
+        });
     };
 
     const clearFilters = () => {
+        setCategory('None');
+        setAvailableOnly(false);
+        setGender('Any');
+        setRating('');
+        setPriceFrom('');
+        setPriceTo('');
 
+        onClearFilter();
     };
 
     const handleAvailableChange = (event) => {
@@ -61,24 +83,18 @@ export function ProductsFilter({products}) {
                     </div>
                     <div className="products-filter__item-body">
                         <div  className="products-filter__radio-container">
-                            <label className="products-filter__radio-label">
-                                <input type="radio" value="male" name="gender"
-                                    checked={gender === 'male'} onChange={handleGenderChange}
-                                    className="products-filter__radio-input"/>
-                                Male
-                            </label>
-                            <label className="products-filter__radio-label">
-                                <input type="radio" value="female" name="gender"
-                                    checked={gender === 'female'} onChange={handleGenderChange}
-                                    className="products-filter__radio-input"/>
-                                Female
-                            </label>
-                            <label className="products-filter__radio-label">
-                                <input type="radio" value="unisex" name="gender"
-                                    checked={gender === 'unisex'} onChange={handleGenderChange}
-                                    className="products-filter__radio-input"/>
-                                Unisex
-                            </label>
+                            {
+                                genders.map(g => {
+                                    return (
+                                        <label className="products-filter__radio-label">
+                                            <input type="radio" value={g} name="gender"
+                                                checked={gender === g} onChange={handleGenderChange}
+                                                className="products-filter__radio-input"/>
+                                            {g}
+                                        </label>
+                                    );
+                                })
+                            }
                         </div>
                     </div>
                 </div>
@@ -87,8 +103,8 @@ export function ProductsFilter({products}) {
                         Category
                     </div>
                     <div className="products-filter__item-body">
-                        <select>
-                            {categories.map(category => <option value={category} key={category}>{category}</option>)}
+                        <select value={category} onChange={handleCategoryChange}>
+                            { categories.map(c => <option value={c} key={c}> {c} </option>) }
                         </select>
                     </div>
                 </div>
