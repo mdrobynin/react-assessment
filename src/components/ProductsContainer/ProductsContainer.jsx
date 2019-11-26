@@ -1,9 +1,19 @@
 import React from 'react';
+import { ProductCard } from 'components';
+import './ProductsContainer.scss';
 
-export function ProductsContainer(props) {
+export function ProductsContainer({ products }) {
+    console.log(products);
+
     return (
-        <div>
-            ProductsContainer
+        <div className="products-container">
+            {
+                products.map(product => {
+                    return (
+                        <ProductCard key={product.id} {...product}/>
+                    );
+                })
+            }
         </div>
     );
 }

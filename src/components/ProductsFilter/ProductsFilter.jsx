@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { CustomButton, InputWithValidation } from 'components';
 import './ProductsFilter.scss';
 
-export function ProductsFilter() {
+export function ProductsFilter({products}) {
     const categories = [
         'None',
         'Category',

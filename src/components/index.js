@@ -8,3 +8,4 @@ export * from './ProductsFilter';
 export * from './CustomButton';
 export * from './FullScreenLoader';
 export * from './AuthChecker';
+export * from './StarRating';
