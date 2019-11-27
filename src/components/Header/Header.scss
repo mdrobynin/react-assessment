@@ -1,9 +1,12 @@
+@import '../../styles';
+
 .header {
     width: 100%;
     display: flex;
     align-items: center;
     padding: 20px;
-    background: #EEE;
+    background: $primary;
+    color: $font-color-light;
 
     &__title {
         font-weight: 600;

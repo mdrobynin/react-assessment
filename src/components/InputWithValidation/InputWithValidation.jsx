@@ -12,8 +12,10 @@ export function InputWithValidation({
     let [ inputValue, setInputValue ] = useState('');
 
     useEffect(() => {
-        setInputValue(value);
-    }, [ value, setInputValue ]);
+        if (value !== inputValue) {
+            setInputValue(value);
+        }
+    }, [ value, inputValue ]);
 
     const validate = () => {
         if (!rules || rules.length === 0) return;

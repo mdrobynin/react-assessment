@@ -5,10 +5,15 @@ export function applyFilter(products, filter) {
         gender,
         priceFrom,
         priceTo,
-        rating
+        rating,
+        query
     } = filter;
 
     let filteredProducts = [...products];
+
+    if (filteredProducts.length && query) {
+        filteredProducts = filteredProducts.filter(x => x.name.toLowerCase().includes(query.toLowerCase()));
+    }
 
     if (filteredProducts.length && availableOnly) {
         filteredProducts = filteredProducts.filter(x => x.count > 0);

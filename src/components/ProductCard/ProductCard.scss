@@ -1,10 +1,14 @@
+@import '../../styles';
+
 .product-card {
     max-width: 300px;
     display: flex;
     flex-direction: column;
     border-radius: 5px;
+    box-shadow: 0 0 5px 1px $background1;
+    background: rgba($background1, 0.5);
     overflow: hidden;
-    margin: 5px;
+    margin: 15px;
 
     &__image-container {
         position: relative;
@@ -25,15 +29,18 @@
         margin: 10px 0;
         font-size: 20px;
         font-weight: 500;
+        margin: 10px;
     }
 
     &__category {
         font-size: 14px;
+        margin: 10px;
     }
 
     &__footer {
         display: flex;
         align-items: center;
+        margin: 10px;
         margin-top: auto;
     }
 

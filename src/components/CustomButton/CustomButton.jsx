@@ -1,9 +1,9 @@
 import React from 'react';
 import './CustomButton.scss';
 
-export function CustomButton({ children, onClick = () => {} }) {
+export function CustomButton({ children, onClick = () => {}, theme = 'dark' }) {
     return (
-        <button className="custom-button" onClick={onClick}>
+        <button className={theme === 'dark' ? 'custom-button custom-button_dark' : 'custom-button custom-button_light'} onClick={onClick}>
             { children }
         </button>
     )

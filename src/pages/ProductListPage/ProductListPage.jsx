@@ -11,7 +11,7 @@ export function ProductListPageComponent({
     productsLoadError,
     allProducts,
     filterProducts,
-    clearFilter
+    clearFilter,
 }) {
     useEffect(() => loadProducts(), [ loadProducts ]);
 
@@ -30,10 +30,15 @@ export function ProductListPageComponent({
 }
 
 const mapStateToProps = state => {
-    const { products, productsLoadProgress, productsLoadError, allProducts } = state.products;
+    const {
+        shownProducts,
+        productsLoadProgress,
+        productsLoadError,
+        allProducts
+    } = state.products;
 
     return {
-        products,
+        products: shownProducts,
         productsLoadProgress,
         productsLoadError,
         allProducts

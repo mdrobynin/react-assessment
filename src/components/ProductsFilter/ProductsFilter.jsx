@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { CustomButton, InputWithValidation } from 'components';
+import {
+    CustomButton,
+    InputWithValidation,
+    CustomRadioInput, 
+    CustomCheckbox,
+    CustomSelect
+} from 'components';
 import './ProductsFilter.scss';
 
 export function ProductsFilter({
@@ -8,6 +14,7 @@ export function ProductsFilter({
     onClearFilter = () => {}
 }) {
     const genders = [ 'Any', 'Man', 'Woman', 'Unisex' ];
+    let [ query, setQuery ] = useState('');
     let [ categories, setCategories ] = useState(['None']);
     let [ category, setCategory ] = useState('None');
     let [ availableOnly, setAvailableOnly ] = useState(false);
@@ -33,7 +40,11 @@ export function ProductsFilter({
     };
 
     const handleCategoryChange = (event) => {
-        setCategory(event.target.value);
+        setCategory(event);
+    };
+
+    const handleQueryChange = (event) => {
+        setQuery(event.target.value);
     };
 
     const applyFilters = () => {
@@ -43,7 +54,8 @@ export function ProductsFilter({
             gender,
             rating,
             priceFrom,
-            priceTo
+            priceTo,
+            query
         });
     };
 
@@ -54,6 +66,7 @@ export function ProductsFilter({
         setRating('');
         setPriceFrom('');
         setPriceTo('');
+        setQuery('');
 
         onClearFilter();
     };
@@ -74,7 +87,7 @@ export function ProductsFilter({
                         Available only
                     </div>
                     <div className="products-filter__item-body">
-                        <input type="checkbox" checked={availableOnly} onChange={handleAvailableChange}/>
+                        <CustomCheckbox checked={availableOnly} onChange={handleAvailableChange}/>
                     </div>
                 </div>
                 <div className="products-filter__item">
@@ -86,12 +99,10 @@ export function ProductsFilter({
                             {
                                 genders.map(g => {
                                     return (
-                                        <label className="products-filter__radio-label">
-                                            <input type="radio" value={g} name="gender"
-                                                checked={gender === g} onChange={handleGenderChange}
-                                                className="products-filter__radio-input"/>
+                                        <CustomRadioInput value={g} name="gender" key={g}
+                                            checked={gender === g} onChange={handleGenderChange}>
                                             {g}
-                                        </label>
+                                        </CustomRadioInput>
                                     );
                                 })
                             }
@@ -103,9 +114,10 @@ export function ProductsFilter({
                         Category
                     </div>
                     <div className="products-filter__item-body">
-                        <select value={category} onChange={handleCategoryChange}>
-                            { categories.map(c => <option value={c} key={c}> {c} </option>) }
-                        </select>
+                        <CustomSelect
+                            options={categories}
+                            onChange={handleCategoryChange}
+                            value={category}/>
                     </div>
                 </div>
                 <div className="products-filter__item">
@@ -125,6 +137,14 @@ export function ProductsFilter({
                     <div className="products-filter__item-body">
                         <InputWithValidation placeholder="From" value={priceFrom} onChange={handlePriceFromChange}/>
                         <InputWithValidation placeholder="To" value={priceTo} onChange={handlePriceToChange}/>
+                    </div>
+                </div>
+                <div className="products-filter__item">
+                    <div className="products-filter__item-title">
+                        Search
+                    </div>
+                    <div className="products-filter__item-body">
+                        <InputWithValidation placeholder="Name" value={query} onChange={handleQueryChange}/>
                     </div>
                 </div>
                 <div className="products-filter__item">

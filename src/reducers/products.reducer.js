@@ -3,10 +3,19 @@ import { applyFilter } from './helpers';
 
 const initialState = {
     productsLoadProgress: false,
-    products: [],
+    shownProducts: [],
+    filteredProducts: [],
     allProducts: [],
-    productsLoadError: false
+    productsLoadError: false,
+    selectedPage: 1,
+    pages: 1
 };
+
+const itemsPerPage = 5;
+
+function getPagesNumber(productsLength) {
+    return productsLength === 0 ? 1 : Math.ceil(productsLength/5)
+}
 
 export default function(state = initialState, action) {
     switch (action.type) {
@@ -26,7 +35,10 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 allProducts: action.payload,
-                products: action.payload,
+                filteredProducts: action.payload,
+                shownProducts: action.payload.slice(0, itemsPerPage),
+                pages: getPagesNumber(action.payload.length),
+                selectedPage: 1
             };
         }
         case PRODUCT_ACTIONS.LOAD_ALL_PRODUCTS_ERROR: {
@@ -36,15 +48,33 @@ export default function(state = initialState, action) {
             };
         }
         case PRODUCT_ACTIONS.FILTER_PRODUCTS: {
+            const filteredProducts = applyFilter(state.allProducts, action.payload);
+            const shownProducts = filteredProducts.slice(0, itemsPerPage);
+
             return {
                 ...state,
-                products: applyFilter(state.allProducts, action.payload)
+                shownProducts,
+                filteredProducts,
+                pages: getPagesNumber(filteredProducts.length),
+                selectedPage: 1
             }
         }
         case PRODUCT_ACTIONS.CLEAR_PRODUCT_FILTER: {
             return {
                 ...state,
-                products: state.allProducts
+                shownProducts: state.allProducts.slice(0, itemsPerPage),
+                filteredProducts: state.allProducts,
+                pages: getPagesNumber(state.allProducts.length),
+                selectedPage: 1
+            };
+        }
+        case PRODUCT_ACTIONS.SELECT_PAGE: {
+            const offset = (action.payload - 1) * itemsPerPage;
+
+            return {
+                ...state,
+                selectedPage: action.payload,
+                shownProducts: state.filteredProducts.slice(offset, offset + itemsPerPage)
             };
         }
         default:

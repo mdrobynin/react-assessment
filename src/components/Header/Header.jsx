@@ -14,7 +14,7 @@ export function HeaderComponent({ userData, preformLogout }) {
             </div>
             <div className="header__spacer"></div>
             <div className="header__logout">
-                <CustomButton onClick={handleLogout}>logout {userData.login}</CustomButton>
+                <CustomButton onClick={handleLogout} theme="light">logout {userData.login}</CustomButton>
             </div>
         </div>
     );

@@ -1,3 +1,5 @@
+@import '../../styles';
+
 .login-page {
     min-height: 100vh;
     width: 100%;
@@ -27,15 +29,15 @@
     }
 
     &__form {
-        box-shadow: 1px 1px 10px 0 #AAA, 2px 2px 20px 0 #EEE;
+        box-shadow: 1px 1px 10px 0 $background1, 2px 2px 20px 0 $background2;
         border-radius: 5px;
         padding: 20px;
-        background: #EEE;
+        background: $background2;
 
         &-title {
             font-size: 20px;
             font-weight: 600;
-            color: #777;
+            color: $font-color-light;
             margin: 10px 5px;
 
         }

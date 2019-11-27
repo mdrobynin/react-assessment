@@ -9,6 +9,14 @@ function LoginPageComponent({ authenticated, performLogin }) {
     let [ login, setLogin ] = useState('');
     let [ password, setPassword ] = useState('');
 
+    const handleLoginChange = (event) => {
+        setLogin(event.target.value);
+    }
+
+    const handlePasswordChange = (event) => {
+        setPassword(event.target.value);
+    }
+
     const handleLogin = () => {
         if (login && password) {
             performLogin(login, password);
@@ -34,13 +42,13 @@ function LoginPageComponent({ authenticated, performLogin }) {
                     
                     </div>
                     <div className="login-page__form-field">
-                        <InputWithValidation value={login} onChange={setLogin}/>
+                        <InputWithValidation value={login} onChange={handleLoginChange}/>
                     </div>
                     <div className="login-page__form-field">
-                        <InputWithValidation type="password" value={password} onChange={setPassword}/>
+                        <InputWithValidation type="password" value={password} onChange={handlePasswordChange}/>
                     </div>
                     <div className="login-page__actions">
-                        <CustomButton onClick={handleLogin}>login</CustomButton>
+                        <CustomButton onClick={handleLogin} theme="light">login</CustomButton>
                     </div>
                 </div>
             </div>
