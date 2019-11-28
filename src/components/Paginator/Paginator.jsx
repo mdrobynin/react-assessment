@@ -10,29 +10,30 @@ export function Paginator({ value, onChange = () => {}, count }) {
     }, [count]);
 
     useEffect(() => {
-        onChange(selectedPage);
-    }, [selectedPage, onChange]);
-
-    useEffect(() => {
-        if (pages.includes(value)) {
+        if (pages.includes(value) && selectedPage !== value) {
             setSelectedPage(value);
         }
-    }, [pages, value]);
+    }, [pages, value, selectedPage]);
 
     const handleLeftArrowClick = () => {
         if (selectedPage > 1) {
             setSelectedPage(selectedPage - 1);
+            onChange(selectedPage - 1);
         }
     };
 
     const handleRightArrowClick = () => {
         if (selectedPage < pages[pages.length - 1]) {
             setSelectedPage(selectedPage + 1);
+            onChange(selectedPage + 1);
         }
     };
 
     const handlePageClick = (event) => {
-        setSelectedPage(+event.target.dataset.page);
+        const page = +event.target.dataset.page;
+
+        setSelectedPage(page);
+        onChange(page);
     };
 
     return (

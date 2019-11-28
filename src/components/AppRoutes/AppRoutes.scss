@@ -1,0 +1,12 @@
+.layout {
+    background: rgba(0, 255, 0, 0.05);
+    min-height: 100vh;
+
+    &__header {
+        flex: 0 0 auto;
+    }
+
+    &__body {
+        flex: 1 0;
+    }
+}

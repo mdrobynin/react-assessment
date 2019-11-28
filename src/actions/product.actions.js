@@ -1,5 +1,6 @@
 import {
-    getProducts
+    getProducts,
+    getProduct
 } from 'requests';
 
 export const PRODUCT_ACTIONS = {
@@ -9,6 +10,9 @@ export const PRODUCT_ACTIONS = {
     FILTER_PRODUCTS: '@@PRODUCT_ACTIONS/FILTER_PRODUCTS',
     CLEAR_PRODUCT_FILTER: '@@PRODUCT_ACTIONS/CLEAR_PRODUCT_FILTER',
     SELECT_PAGE: '@@PRODUCT_ACTIONS/SELECT_PAGE',
+    LOAD_PRODUCT_PROGRESS: '@@PRODUCT_ACTIONS/LOAD_PRODUCT_PROGRESS',
+    LOAD_PRODUCT_ERROR: '@@PRODUCT_ACTIONS/LOAD_PRODUCT_ERROR',
+    LOAD_PRODUCT_SUCCESS: '@@PRODUCT_ACTIONS/LOAD_PRODUCT_SUCCESS',
 }
 
 export function fetchProducts() {
@@ -27,6 +31,26 @@ export function fetchProducts() {
                 }
 
                 dispatch({ type: PRODUCT_ACTIONS.LOAD_ALL_PRODUCTS_PROGRESS, payload: false });
+            });
+    }
+}
+
+export function fetchProduct(id) {
+    return dispatch => {
+        dispatch({ type: PRODUCT_ACTIONS.LOAD_PRODUCT_PROGRESS, payload: true });
+
+        return getProduct(id)
+            .then(product => {
+                if (product) {
+                    dispatch({
+                        type: PRODUCT_ACTIONS.LOAD_PRODUCT_SUCCESS,
+                        payload: product
+                    });
+                } else {
+                    dispatch({ type: PRODUCT_ACTIONS.LOAD_PRODUCT_ERROR });
+                }
+
+                dispatch({ type: PRODUCT_ACTIONS.LOAD_PRODUCT_PROGRESS, payload: false });
             });
     }
 }

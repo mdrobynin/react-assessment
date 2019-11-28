@@ -1,11 +1,13 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { CustomButton } from 'components';
 import { logout } from 'actions';
 import './Header.scss';
 
-export function HeaderComponent({ userData, preformLogout }) {
-    const handleLogout = () => preformLogout();
+export function Header() {
+    let dispatch = useDispatch();
+    let userData = useSelector(state => state.user.userData);
+    const handleLogout = () => dispatch(logout());
 
     return (
         <div className="header">
@@ -19,19 +21,3 @@ export function HeaderComponent({ userData, preformLogout }) {
         </div>
     );
 }
-
-const mapStateToProps = state => {
-    return {
-        userData: state.user.userData
-    };
-}
-
-const mapDispatchToProps = dispatch => {
-    return {
-        preformLogout() {
-            dispatch(logout());
-        }
-    };
-}
-
-export const Header = connect(mapStateToProps, mapDispatchToProps)(HeaderComponent);

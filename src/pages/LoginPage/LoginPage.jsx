@@ -1,25 +1,23 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { InputWithValidation, CustomButton } from 'components';
-import { login } from 'actions';
+import { login as performLogin } from 'actions';
 import './LoginPage.scss';
 
-function LoginPageComponent({ authenticated, performLogin }) {
+export function LoginPage() {
     let [ login, setLogin ] = useState('');
     let [ password, setPassword ] = useState('');
+    let authenticated = useSelector(state => state.user.authenticated);
+    let dispatch = useDispatch();
 
-    const handleLoginChange = (event) => {
-        setLogin(event.target.value);
-    }
-
-    const handlePasswordChange = (event) => {
-        setPassword(event.target.value);
+    const handleInputValueChange = setter => event => {
+        setter(event.target.value);
     }
 
     const handleLogin = () => {
         if (login && password) {
-            performLogin(login, password);
+            dispatch(performLogin(login, password));
         }
     }
 
@@ -42,10 +40,10 @@ function LoginPageComponent({ authenticated, performLogin }) {
                     
                     </div>
                     <div className="login-page__form-field">
-                        <InputWithValidation value={login} onChange={handleLoginChange}/>
+                        <InputWithValidation value={login} onChange={handleInputValueChange(setLogin)}/>
                     </div>
                     <div className="login-page__form-field">
-                        <InputWithValidation type="password" value={password} onChange={handlePasswordChange}/>
+                        <InputWithValidation type="password" value={password} onChange={handleInputValueChange(setPassword)}/>
                     </div>
                     <div className="login-page__actions">
                         <CustomButton onClick={handleLogin} theme="light">login</CustomButton>
@@ -55,19 +53,3 @@ function LoginPageComponent({ authenticated, performLogin }) {
         </div>
     );
 }
-
-const mapStateToProps = state => {
-    return {
-        authenticated: state.user.authenticated
-    };
-};
-
-const mapDispatchToProps = dispatch => {
-    return {
-        performLogin(username, password) {
-            dispatch(login(username, password));
-        }
-    };
-};
-
-export const LoginPage = connect(mapStateToProps, mapDispatchToProps)(LoginPageComponent);

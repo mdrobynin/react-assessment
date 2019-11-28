@@ -27,24 +27,12 @@ export function ProductsFilter({
         setCategories(['None', ...Array.from(new Set(products.map(p => p.category)))]);
     }, [ products, setCategories ]);
 
-    const handleRatingChange = (event) => {
-        setRating(event.target.value);
-    };
-
-    const handlePriceFromChange = (event) => {
-        setPriceFrom(event.target.value);
-    };
-
-    const handlePriceToChange = (event) => {
-        setPriceTo(event.target.value);
-    };
+    const handleInputValueChange = setter => event => {
+        setter(event.target.value);
+    }
 
     const handleCategoryChange = (event) => {
         setCategory(event);
-    };
-
-    const handleQueryChange = (event) => {
-        setQuery(event.target.value);
     };
 
     const applyFilters = () => {
@@ -75,10 +63,6 @@ export function ProductsFilter({
         setAvailableOnly(event.target.checked);
     }
 
-    const handleGenderChange = (event) => {
-        setGender(event.target.value);
-    }
-
     return (
         <div className="products-filter">
             <div className="products-filter__row">
@@ -100,7 +84,7 @@ export function ProductsFilter({
                                 genders.map(g => {
                                     return (
                                         <CustomRadioInput value={g} name="gender" key={g}
-                                            checked={gender === g} onChange={handleGenderChange}>
+                                            checked={gender === g} onChange={handleInputValueChange(setGender)}>
                                             {g}
                                         </CustomRadioInput>
                                     );
@@ -125,7 +109,10 @@ export function ProductsFilter({
                         Rating
                     </div>
                     <div className="products-filter__item-body">
-                        <InputWithValidation placeholder="Rating" value={rating} onChange={handleRatingChange}/>
+                        <InputWithValidation
+                            placeholder="Rating"
+                            value={rating}
+                            onChange={handleInputValueChange(setRating)}/>
                     </div>
                 </div>
             </div>
@@ -135,8 +122,14 @@ export function ProductsFilter({
                         Price
                     </div>
                     <div className="products-filter__item-body">
-                        <InputWithValidation placeholder="From" value={priceFrom} onChange={handlePriceFromChange}/>
-                        <InputWithValidation placeholder="To" value={priceTo} onChange={handlePriceToChange}/>
+                        <InputWithValidation
+                            placeholder="From"
+                            value={priceFrom}
+                            onChange={handleInputValueChange(setPriceFrom)}/>
+                        <InputWithValidation
+                            placeholder="To"
+                            value={priceTo}
+                            onChange={handleInputValueChange(setPriceTo)}/>
                     </div>
                 </div>
                 <div className="products-filter__item">
@@ -144,7 +137,10 @@ export function ProductsFilter({
                         Search
                     </div>
                     <div className="products-filter__item-body">
-                        <InputWithValidation placeholder="Name" value={query} onChange={handleQueryChange}/>
+                        <InputWithValidation
+                            placeholder="Name"
+                            value={query}
+                            onChange={handleInputValueChange(setQuery)}/>
                     </div>
                 </div>
                 <div className="products-filter__item">

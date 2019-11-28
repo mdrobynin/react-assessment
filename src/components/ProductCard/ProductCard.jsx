@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { StarRating, CustomButton } from 'components';
 import './ProductCard.scss';
 
@@ -7,7 +8,8 @@ export function ProductCard({
     cost,
     image,
     name,
-    rating
+    rating,
+    id
 }) {
     const handleImageLoadError = (event) => {
         event.target.src = 'https://via.placeholder.com/500x400';
@@ -30,7 +32,9 @@ export function ProductCard({
             <div className="product-card__footer">
                 <span className="product-card__cost">{cost}</span>
                 <CustomButton>Buy</CustomButton>
-                <CustomButton>Details</CustomButton>
+                <Link to={`/products/${id}`}>
+                    <CustomButton>Details</CustomButton>
+                </Link>
             </div>
         </div>
     );

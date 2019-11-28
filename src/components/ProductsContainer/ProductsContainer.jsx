@@ -1,10 +1,22 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { ProductCard, Paginator } from 'components';
 import { PRODUCT_ACTIONS } from 'actions';
 import './ProductsContainer.scss';
 
-export function ProductsContainerComponent({ products, selectedPage, pages, selectPage }) {
+export function ProductsContainer() {
+    let selectedPage = useSelector(state => state.products.selectedPage);
+    let pages = useSelector(state => state.products.pages);
+    let products = useSelector(state => state.products.shownProducts);
+    let dispatch = useDispatch();
+
+    const selectPage = (page) => {
+        dispatch({
+            type: PRODUCT_ACTIONS.SELECT_PAGE,
+            payload: page
+        });
+    }
+
     return (
         <div className="products-container">
             <div className="products-container__paginator">
@@ -22,20 +34,3 @@ export function ProductsContainerComponent({ products, selectedPage, pages, sele
         </div>
     );
 }
-
-const mapStateToProps = state => {
-    return {
-        selectedPage: state.products.selectedPage,
-        pages: state.products.pages
-    };
-};
-
-const mapDispatchToProps = dispatch => {
-    return {
-        selectPage(page) {
-            dispatch({ type: PRODUCT_ACTIONS.SELECT_PAGE, payload: page })
-        }
-    };
-}
-
-export const ProductsContainer = connect(mapStateToProps, mapDispatchToProps)(ProductsContainerComponent);

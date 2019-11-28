@@ -1,6 +1,5 @@
 import React from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
-
 import { Header } from 'components/Header';
 import {
     Checkout,
@@ -10,6 +9,7 @@ import {
     ProductDetailsPage,
     AddEditProductPage
 } from 'pages';
+import './AppRoutes.scss';
 
 export function AppRoutes(props) {
     return (

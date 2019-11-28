@@ -1,62 +1,36 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ProductsFilter, ProductsContainer } from 'components';
 import { fetchProducts, PRODUCT_ACTIONS } from 'actions';
 import './ProductListPage.scss';
 
-export function ProductListPageComponent({
-    products,
-    loadProducts,
-    productsLoadProgress,
-    productsLoadError,
-    allProducts,
-    filterProducts,
-    clearFilter,
-}) {
-    useEffect(() => loadProducts(), [ loadProducts ]);
+export function ProductListPage() {
+    let dispatch = useDispatch();
+    let productsLoadProgress = useSelector(state => state.products.productsLoadProgress);
+    let productsLoadError = useSelector(state => state.products.productsLoadError);
+    let allProducts = useSelector(state => state.products.allProducts);
+
+    const filterProducts = (filter) => dispatch({
+        type: PRODUCT_ACTIONS.FILTER_PRODUCTS,
+        payload: filter
+    });
+    const clearFilter = () => dispatch({ type: PRODUCT_ACTIONS.CLEAR_PRODUCT_FILTER });
+
+    useEffect(() => {
+        dispatch(fetchProducts());
+    }, []);
 
     return (
         <div className="product-list">
             <div className="product-list__filter">
-                <ProductsFilter products={allProducts}
+                <ProductsFilter
+                    products={allProducts}
                     onApplyFilter={filterProducts}
                     onClearFilter={clearFilter}/>
             </div>
             <div className="product-list__container">
-                <ProductsContainer products={products}/>
+                <ProductsContainer/>
             </div>
         </div>
     );
 }
-
-const mapStateToProps = state => {
-    const {
-        shownProducts,
-        productsLoadProgress,
-        productsLoadError,
-        allProducts
-    } = state.products;
-
-    return {
-        products: shownProducts,
-        productsLoadProgress,
-        productsLoadError,
-        allProducts
-    };
-};
-
-const mapDispatchToProps = dispatch => {
-    return {
-        loadProducts() {
-            dispatch(fetchProducts());
-        },
-        filterProducts(filter) {
-            dispatch({ type: PRODUCT_ACTIONS.FILTER_PRODUCTS, payload: filter });
-        },
-        clearFilter() {
-            dispatch({ type: PRODUCT_ACTIONS.CLEAR_PRODUCT_FILTER });
-        }
-    };
-}
-
-export const ProductListPage = connect(mapStateToProps, mapDispatchToProps)(ProductListPageComponent);
