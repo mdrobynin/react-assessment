@@ -7,7 +7,7 @@ const uuidV1 = require('uuid/v1');
 const PORT = process.env.PORT || 4321;
 const sessionTokenName = 'session-token';
 const authorizedUsers = {};
-const {
+let {
 	users,
 	roles,
 	categories,
@@ -109,6 +109,10 @@ app.get(URLS.CATEGORIES, (req, res) => res.json(categories));
 app.get(URLS.PRODUCTS, (req, res) => res.json(products));
 app.get(URLS.CATEGORY, (req, res) => res.json(categories.find(x => x.id === +req.params.id)));
 app.get(URLS.PRODUCT, (req, res) => res.json(products.find(x => x.id === +req.params.id)));
+app.delete(URLS.PRODUCT, (req, res) => {
+    products = products.filter(x => x.id !== +req.params.id);
+    res.json({ success: true });
+})
 
 app.listen(PORT, () => {
   console.log(`Server is listening on port ${ PORT }`);

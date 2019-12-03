@@ -8,28 +8,39 @@ import {
 } from 'components';
 import './ProductsFilter.scss';
 
+function useFormControl(initialValue) {
+    let [ value, setValue ] = useState(initialValue);
+
+    const handleValueChange = (event) => {
+        if (typeof event === 'string') {
+            setValue(event);
+        } else {
+            setValue(event.target.value);
+        }
+    }
+
+    return [ value, handleValueChange ];
+}
+
 export function ProductsFilter({
     products,
     onApplyFilter = () => {},
     onClearFilter = () => {}
 }) {
     const genders = [ 'Any', 'Man', 'Woman', 'Unisex' ];
-    let [ query, setQuery ] = useState('');
+
     let [ categories, setCategories ] = useState(['None']);
     let [ category, setCategory ] = useState('None');
     let [ availableOnly, setAvailableOnly ] = useState(false);
-    let [ gender, setGender ] = useState('Any');
-    let [ rating, setRating ] = useState('');
-    let [ priceFrom, setPriceFrom ] = useState('');
-    let [ priceTo, setPriceTo ] = useState('');
+    let [ query, setQuery ] = useFormControl('');
+    let [ gender, setGender ] = useFormControl('Any');
+    let [ rating, setRating ] = useFormControl('');
+    let [ priceFrom, setPriceFrom ] = useFormControl('');
+    let [ priceTo, setPriceTo ] = useFormControl('');
 
     useEffect(() => {
         setCategories(['None', ...Array.from(new Set(products.map(p => p.category)))]);
     }, [ products, setCategories ]);
-
-    const handleInputValueChange = setter => event => {
-        setter(event.target.value);
-    }
 
     const handleCategoryChange = (event) => {
         setCategory(event);
@@ -84,7 +95,7 @@ export function ProductsFilter({
                                 genders.map(g => {
                                     return (
                                         <CustomRadioInput value={g} name="gender" key={g}
-                                            checked={gender === g} onChange={handleInputValueChange(setGender)}>
+                                            checked={gender === g} onChange={setGender}>
                                             {g}
                                         </CustomRadioInput>
                                     );
@@ -112,7 +123,7 @@ export function ProductsFilter({
                         <InputWithValidation
                             placeholder="Rating"
                             value={rating}
-                            onChange={handleInputValueChange(setRating)}/>
+                            onChange={setRating}/>
                     </div>
                 </div>
             </div>
@@ -125,11 +136,11 @@ export function ProductsFilter({
                         <InputWithValidation
                             placeholder="From"
                             value={priceFrom}
-                            onChange={handleInputValueChange(setPriceFrom)}/>
+                            onChange={setPriceFrom}/>
                         <InputWithValidation
                             placeholder="To"
                             value={priceTo}
-                            onChange={handleInputValueChange(setPriceTo)}/>
+                            onChange={setPriceTo}/>
                     </div>
                 </div>
                 <div className="products-filter__item">
@@ -140,7 +151,7 @@ export function ProductsFilter({
                         <InputWithValidation
                             placeholder="Name"
                             value={query}
-                            onChange={handleInputValueChange(setQuery)}/>
+                            onChange={setQuery}/>
                     </div>
                 </div>
                 <div className="products-filter__item">

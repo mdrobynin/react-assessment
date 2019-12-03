@@ -1,6 +1,7 @@
 import {
     getProducts,
-    getProduct
+    getProduct,
+    deleteProduct
 } from 'requests';
 
 export const PRODUCT_ACTIONS = {
@@ -52,5 +53,13 @@ export function fetchProduct(id) {
 
                 dispatch({ type: PRODUCT_ACTIONS.LOAD_PRODUCT_PROGRESS, payload: false });
             });
+    }
+}
+
+export function removeProduct(id) {
+    return dispatch => {
+        dispatch({ type: PRODUCT_ACTIONS.LOAD_ALL_PRODUCTS_PROGRESS, payload: true });
+
+        deleteProduct(id).then(() => dispatch(fetchProducts()));
     }
 }

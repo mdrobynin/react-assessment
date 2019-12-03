@@ -6,7 +6,8 @@ const initialState = {
     logoutError: null,
     authenticated: false,
     userData: null,
-    authStateChecked: false
+    authStateChecked: false,
+    isUserAdmin: false,
 };
 
 export default function(state = initialState, action) {
@@ -20,19 +21,37 @@ export default function(state = initialState, action) {
             };
         }
         case USER_ACTIONS.LOGIN_SUCCESS: {
-            return {...state, userData: action.payload, authenticated: true };
+            return {
+                ...state,
+                userData: action.payload,
+                authenticated: true,
+                isUserAdmin: action.payload.role === 'Admin'
+            };
         }
         case USER_ACTIONS.LOGIN_ERROR: {
-            return {...state, loginError: action.payload };
+            return {
+                ...state,
+                loginError: action.payload
+            };
         }
         case USER_ACTIONS.LOGOUT_SUCCESS: {
-            return {...state, userData: null, authenticated: false }; 
+            return {
+                ...state,
+                userData: null,
+                authenticated: false
+            }; 
         }
         case USER_ACTIONS.LOGOUT_ERROR: {
-            return {...state, logoutError: action.payload };
+            return {
+                ...state,
+                logoutError: action.payload
+            };
         }
         case USER_ACTIONS.AUTH_STATE_CHECK: {
-            return {...state, authStateChecked: true };
+            return {
+                ...state,
+                authStateChecked: true
+            };
         }
         default:
             return state;

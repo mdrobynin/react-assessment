@@ -1,4 +1,4 @@
-import { get } from './helpers';
+import { get, deleteReq } from './helpers';
 import { paths } from './config';
 
 export function getProducts() {
@@ -39,4 +39,8 @@ export function getCategories() {
 
 export function getCategory(id) {
     return get(`${paths.CATEGORIES}/${id}`).then(res => res.status === 200 ? res.json() : null);
+}
+
+export function deleteProduct(id) {
+    return deleteReq(`${paths.PRODUCTS}/${id}`).then(res => res.status === 200 ? res.json() : null);
 }

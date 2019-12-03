@@ -30,3 +30,14 @@ export function post(url, body) {
         },
     }).catch(() => {});
 }
+
+export function deleteReq(url, body) {
+    return fetch(url, {
+        body: typeof body === 'string' ? body : JSON.stringify(body),
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'session-token': getSessionToken()
+        },
+    }).catch(() => {});
+}

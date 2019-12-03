@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { StarRating, CustomButton } from 'components';
+import { removeProduct } from 'actions';
 import './ProductCard.scss';
 
 export function ProductCard({
@@ -11,9 +13,16 @@ export function ProductCard({
     rating,
     id
 }) {
+    let isUserAdmin = useSelector(state => state.user.isUserAdmin);
+    let dispatch = useDispatch();
+
     const handleImageLoadError = (event) => {
         event.target.src = 'https://via.placeholder.com/500x400';
     };
+
+    const handleRemove = id => () => {
+        dispatch(removeProduct(id));
+    }
 
     return (
         <div className="product-card">
@@ -31,6 +40,9 @@ export function ProductCard({
             </div>
             <div className="product-card__footer">
                 <span className="product-card__cost">{cost}</span>
+                {
+                    isUserAdmin ? <CustomButton onClick={handleRemove(id)}> Remove </CustomButton> : null
+                }
                 <CustomButton>Buy</CustomButton>
                 <Link to={`/products/${id}`}>
                     <CustomButton>Details</CustomButton>
