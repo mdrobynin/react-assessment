@@ -19,6 +19,7 @@ export function ProductDetailsPage() {
         rating
     } = useSelector(state => state.product.product ? state.product.product : {});
     let productLoadError = useSelector(state => state.product.productLoadError);
+    let isUserAdmin = useSelector(state => state.user.isUserAdmin);
 
     useEffect(() => {
         dispatch(fetchProduct(id));
@@ -30,8 +31,13 @@ export function ProductDetailsPage() {
 
     return (
         <div className="product-details-wrapper">
-            <div className="product-details-wrapper__back">
-                <Link to="/products" className="product-details-wrapper__back-link"> Back to product list</Link>
+            <div className="product-details-wrapper__header">
+                <Link to="/products" className="product-details-wrapper__header-link"> Back to product list</Link>
+                {
+                    isUserAdmin
+                        ? <Link to={`/add-edit-product/${id}`} className="product-details-wrapper__header-link"> Edit product </Link>
+                        : null
+                }
             </div>
             <div className="product-details-wrapper__body">
                 {

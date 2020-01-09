@@ -32,13 +32,16 @@ export default function(state = initialState, action) {
             return newState;
         }
         case PRODUCT_ACTIONS.LOAD_ALL_PRODUCTS_SUCCESS: {
+            const selectedPage = state.selectedPage ? state.selectedPage : 1;
+            const offset = (selectedPage - 1) * itemsPerPage;
+
             return {
                 ...state,
                 allProducts: action.payload,
                 filteredProducts: action.payload,
-                shownProducts: action.payload.slice(0, itemsPerPage),
+                shownProducts: action.payload.slice(offset, offset + itemsPerPage),
                 pages: getPagesNumber(action.payload.length),
-                selectedPage: 1
+                selectedPage
             };
         }
         case PRODUCT_ACTIONS.LOAD_ALL_PRODUCTS_ERROR: {

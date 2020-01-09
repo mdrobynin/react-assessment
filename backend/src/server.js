@@ -112,6 +112,16 @@ app.get(URLS.PRODUCT, (req, res) => res.json(products.find(x => x.id === +req.pa
 app.delete(URLS.PRODUCT, (req, res) => {
     products = products.filter(x => x.id !== +req.params.id);
     res.json({ success: true });
+});
+app.put(URLS.PRODUCT, (req, res) => {
+    const product = products.find(x => x.id === +req.params.id);
+
+    if (product) {
+        Object.assign(product, req.body);
+        res.json({ success: true });
+    } else {
+        res.json({ success: false });
+    }
 })
 
 app.listen(PORT, () => {
