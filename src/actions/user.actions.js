@@ -4,6 +4,9 @@ import {
     performLogout,
     checkAuthStatus
 } from '../requests';
+import {
+    CHECKOUT_ACTIONS
+} from './checkout.actions';
 
 export const USER_ACTIONS = {
     LOGIN_LOGOUT_PROCESS: '@@USER_ACTIONS/LOGIN_LOGOUT_PROCESS',
@@ -49,6 +52,7 @@ export function logout() {
             .then(result => {
                 dispatch({ type: result ? USER_ACTIONS.LOGOUT_SUCCESS : USER_ACTIONS.LOGOUT_ERROR });
                 dispatch({ type: USER_ACTIONS.LOGIN_LOGOUT_PROCESS, payload: false });
+                dispatch({ type: CHECKOUT_ACTIONS.CLEAR_BASKET });
             });
     };
 }

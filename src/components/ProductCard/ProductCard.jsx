@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { StarRating, CustomButton } from 'components';
-import { removeProduct } from 'actions';
+import { removeProduct, addToBasket } from 'actions';
 import './ProductCard.scss';
 
 export function ProductCard({
@@ -19,6 +19,10 @@ export function ProductCard({
     const handleImageLoadError = (event) => {
         event.target.src = 'https://via.placeholder.com/500x400';
     };
+
+    const handleAddToBasket = () => () => {
+        dispatch(addToBasket(arguments[0]));
+    }
 
     const handleRemove = id => () => {
         dispatch(removeProduct(id));
@@ -43,7 +47,7 @@ export function ProductCard({
                 {
                     isUserAdmin ? <CustomButton onClick={handleRemove(id)}> Remove </CustomButton> : null
                 }
-                <CustomButton>Buy</CustomButton>
+                <CustomButton onClick={handleAddToBasket()}>Buy</CustomButton>
                 <Link to={`/products/${id}`}>
                     <CustomButton>Details</CustomButton>
                 </Link>
