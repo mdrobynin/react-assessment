@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Fragment } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ProductsFilter, ProductsContainer } from 'components';
 import { fetchProducts, PRODUCT_ACTIONS } from 'actions';
@@ -18,19 +18,35 @@ export function ProductListPage() {
 
     useEffect(() => {
         dispatch(fetchProducts());
-    }, []);
+    }, [ dispatch ]);
 
     return (
         <div className="product-list">
-            <div className="product-list__filter">
-                <ProductsFilter
-                    products={allProducts}
-                    onApplyFilter={filterProducts}
-                    onClearFilter={clearFilter}/>
-            </div>
-            <div className="product-list__container">
-                <ProductsContainer/>
-            </div>
+            {
+                productsLoadProgress ?
+                <div className="product-list__status">
+                    Loading...
+                </div> :
+                <Fragment>
+                    {
+                        productsLoadError ?
+                        <div className="product-list__body">
+                            Error occured during product loading
+                        </div> : 
+                        <div className="product-list__body">
+                            <div className="product-list__filter">
+                                <ProductsFilter
+                                    products={allProducts}
+                                    onApplyFilter={filterProducts}
+                                    onClearFilter={clearFilter}/>
+                            </div>
+                            <div className="product-list__container">
+                                <ProductsContainer/>
+                            </div>
+                        </div>
+                    }
+                </Fragment>
+            }
         </div>
     );
 }

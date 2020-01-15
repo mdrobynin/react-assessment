@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, Link } from 'react-router-dom';
 import { fetchProduct } from 'actions';
@@ -23,7 +23,7 @@ export function AddEditProductPage() {
 
     useEffect(() => {
         dispatch(fetchProduct(id));
-    }, []);
+    }, [ dispatch, id ]);
 
     const imageLoadErrorHandler = (event) => {
         event.target.src = 'https://via.placeholder.com/500x400';
@@ -39,7 +39,13 @@ export function AddEditProductPage() {
                         : null
                 }
             </div>
-            <div className="add-edit-product-wrapper__body">
+            {
+                productLoadError ?
+                <div className="add-edit-product-wrapper__error">
+                    Error occured during loading product
+                </div>
+                : 
+                <div className="add-edit-product-wrapper__body">
                 {
                     productLoadProgress
                         ? <FullScreenLoader/>
@@ -73,6 +79,7 @@ export function AddEditProductPage() {
                     </div>
                 }
             </div>
+            }
         </div>
     );
 }

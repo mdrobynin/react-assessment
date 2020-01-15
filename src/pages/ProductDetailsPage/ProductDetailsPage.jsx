@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, Link } from 'react-router-dom';
 import { fetchProduct } from 'actions';
@@ -23,7 +23,7 @@ export function ProductDetailsPage() {
 
     useEffect(() => {
         dispatch(fetchProduct(id));
-    }, []);
+    }, [ dispatch, id ]);
 
     const imageLoadErrorHandler = (event) => {
         event.target.src = 'https://via.placeholder.com/500x400';
@@ -39,40 +39,46 @@ export function ProductDetailsPage() {
                         : null
                 }
             </div>
-            <div className="product-details-wrapper__body">
-                {
-                    productLoadProgress
-                        ? <FullScreenLoader/>
-                        : <div className="product-details">
-                        <div className="product-details__column">
-                            <div className="product-details__image-container">
-                                <img src={image} className="product-details__image"
-                                    alt="product" onError={imageLoadErrorHandler}/>
-                                <StarRating rating={rating}/>
-                            </div>
-                            <div className="product-details__info">
-                                <div className="product-details__cost">
-                                    { `${cost}$` }
+            {
+                productLoadError ?
+                <div className="product-details-wrapper__header">
+                    Error occured during product loading
+                </div> :
+                <div className="product-details-wrapper__body">
+                    {
+                        productLoadProgress
+                            ? <FullScreenLoader/>
+                            : <div className="product-details">
+                            <div className="product-details__column">
+                                <div className="product-details__image-container">
+                                    <img src={image} className="product-details__image"
+                                        alt="product" onError={imageLoadErrorHandler}/>
+                                    <StarRating rating={rating}/>
                                 </div>
-                                <div className="product-details__gender">
-                                    { gender }
+                                <div className="product-details__info">
+                                    <div className="product-details__cost">
+                                        { `${cost}$` }
+                                    </div>
+                                    <div className="product-details__gender">
+                                        { gender }
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="product-details__column">
+                                <h1 className="product-details__name">
+                                    {name}
+                                </h1>
+                                <h2 className="product-details__category">
+                                    {category}
+                                </h2>
+                                <div className="product-details__description">
+                                    {description}
                                 </div>
                             </div>
                         </div>
-                        <div className="product-details__column">
-                            <h1 className="product-details__name">
-                                {name}
-                            </h1>
-                            <h2 className="product-details__category">
-                                {category}
-                            </h2>
-                            <div className="product-details__description">
-                                {description}
-                            </div>
-                        </div>
-                    </div>
-                }
-            </div>
+                    }
+                </div>
+            }
         </div>
     );
 }
