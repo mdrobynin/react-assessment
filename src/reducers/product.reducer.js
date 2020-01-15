@@ -1,6 +1,6 @@
 import { PRODUCT_ACTIONS } from '../actions';
 
-const initialState = {
+export const initialState = {
     productLoadProgress: false,
     product: null,
     productsLoadError: false,
