@@ -1,18 +1,37 @@
 const CHECKOUT_CONTENT_KEY = 'checkoutContent';
 
 export const CHECKOUT_ACTIONS = {
-    LOAD_BASKET_ITEMS: 'LOAD_CHECKOUT_PRODUCTS',
-    CLEAR_BASKET: 'CLEAR_BASKET'
+    LOAD_BASKET_ITEMS: '@@CHECKOUT_ACTIONS/LOAD_CHECKOUT_PRODUCTS',
+    CLEAR_BASKET: '@@CHECKOUT_ACTIONS/CLEAR_BASKET'
 };
+
+function saveCheckoutContent(content) {
+    if (typeof content === 'object') {
+        localStorage.setItem(CHECKOUT_CONTENT_KEY, JSON.stringify(content));
+    }
+}
+
+function getCheckoutContent() {
+    const contentStr = localStorage.getItem(CHECKOUT_CONTENT_KEY);
+
+    if (contentStr) {
+        try {
+            return JSON.parse(contentStr);
+        } catch (e) {
+            return null;
+        }
+    } else {
+        return null;
+    }
+}
 
 export function loadCheckoutProducts() {
     return (dispatch, getState) => {
         const { user } = getState();
-        const contentStr = localStorage.getItem(CHECKOUT_CONTENT_KEY);
+        const content = getCheckoutContent();
         let basketItems = [];
 
-        if (contentStr) {
-            const content = JSON.parse(contentStr);
+        if (content) {
             basketItems = content[user.userData.login];
         }
 
@@ -26,10 +45,9 @@ export function loadCheckoutProducts() {
 export function addToBasket(product) {
     return (dispatch, getState) => {
         const { user } = getState();
-        const contentStr = localStorage.getItem(CHECKOUT_CONTENT_KEY);
+        const content = getCheckoutContent();
 
-        if (contentStr) {
-            const content = JSON.parse(contentStr);
+        if (content) {
             const basketItems = content[user.userData.login] ? content[user.userData.login] : [];
             const basketItem = basketItems.find(x => x.product.id === product.id);
 
@@ -41,7 +59,7 @@ export function addToBasket(product) {
 
             const newContent = {...content, [user.userData.login]: basketItems };
 
-            localStorage.setItem(CHECKOUT_CONTENT_KEY, JSON.stringify(newContent));
+            saveCheckoutContent(newContent);
 
             dispatch({
                 type: CHECKOUT_ACTIONS.LOAD_BASKET_ITEMS,
@@ -52,7 +70,7 @@ export function addToBasket(product) {
                 [user.userData.login]: [ { product, count: 1 } ]
             };
 
-            localStorage.setItem(CHECKOUT_CONTENT_KEY, JSON.stringify(data));
+            saveCheckoutContent(data);
 
             dispatch({
                 type: CHECKOUT_ACTIONS.LOAD_BASKET_ITEMS,
@@ -65,13 +83,12 @@ export function addToBasket(product) {
 export function removeFromBasket(product) {
     return (dispatch, getState) => {
         const { user } = getState();
-        const contentStr = localStorage.getItem(CHECKOUT_CONTENT_KEY);
-        const content = JSON.parse(contentStr);
+        const content = getCheckoutContent();
         const basketItems = content[user.userData.login] ? content[user.userData.login] : [];
         const newBasketItems = basketItems.filter(x => x.product.id !== product.id);
         const newContent = {...content, [user.userData.login]: newBasketItems };
 
-        localStorage.setItem(CHECKOUT_CONTENT_KEY, JSON.stringify(newContent));
+        saveCheckoutContent(newContent);
 
         dispatch({
             type: CHECKOUT_ACTIONS.LOAD_BASKET_ITEMS,
